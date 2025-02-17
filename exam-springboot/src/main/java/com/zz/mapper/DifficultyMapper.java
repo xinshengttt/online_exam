@@ -1,19 +1,18 @@
-package com.zz.dao;
+package com.zz.mapper;
 
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zz.bean.Course;
 import com.zz.bean.Difficulty;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.ArrayList;
 
 @Mapper
-public interface DifficultyDao {
+public interface DifficultyMapper extends BaseMapper<Difficulty> {
 
-    @Select("select d_id, name from difficulty")
     ArrayList<Difficulty> selectAll();
 
-    @Select("select name from difficulty where d_id=#{dId}")
     String selectById(Integer dId);
 }

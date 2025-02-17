@@ -2,14 +2,14 @@ package com.zz.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zz.dao.DifficultyDao;
+import com.zz.mapper.DifficultyMapper;
 import com.zz.service.TopicService;
 import com.zz.bean.Papers;
 import com.zz.bean.Topic;
 import com.zz.bean.PapersContent;
-import com.zz.dao.PapersDao;
-import com.zz.dao.TopicDao;
-import com.zz.dao.TopicTypeDao;
+import com.zz.mapper.PapersMapper;
+import com.zz.mapper.TopicMapper;
+import com.zz.mapper.TopicTypeMapper;
 import com.zz.utils.AnswerUtils;
 import com.zz.utils.Code;
 import com.zz.utils.result.ApiResult;
@@ -28,16 +28,16 @@ import java.util.stream.Collectors;
 public class TopicServiceImpl implements TopicService {
 
     @Autowired
-    private TopicDao topicDao;
+    private TopicMapper topicMapper;
 
     @Autowired
-    private PapersDao papersDao;
+    private PapersMapper papersMapper;
 
     @Autowired
-    private TopicTypeDao topicTypeDao;
+    private TopicTypeMapper topicTypeMapper;
 
     @Autowired
-    private DifficultyDao difficultyDao;
+    private DifficultyMapper difficultyMapper;
 
     /**
      * 添加题目
@@ -47,7 +47,7 @@ public class TopicServiceImpl implements TopicService {
         TempResult tempResult = new TempResult();
         topic.setCreateTime(LocalDateTime.now());
         topic.setAnswer(AnswerUtils.formatAnswer(topic.getTypeId(), topic.getAnswer()));
-        Integer integer = topicDao.addTopic(topic);
+        Integer integer = topicMapper.addTopic(topic);
         tempResult.setFlag(integer != 0);
         tempResult.setMsg(tempResult.isFlag() ? "题目添加成功！" : Code.ERROR_MSG);
         return tempResult;
@@ -61,7 +61,7 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     public ArrayList<Topic> selectByUId(Integer uId) {
-        return topicDao.selectByUId(uId);
+        return topicMapper.selectByUId(uId);
     }
 
     /**
@@ -73,7 +73,7 @@ public class TopicServiceImpl implements TopicService {
      */
     @Override
     public ApiResult<List<Topic>> searchByInfo(Integer uId, String info) {
-        ArrayList<Topic> topicList = topicDao.selectByUId(uId);
+        ArrayList<Topic> topicList = topicMapper.selectByUId(uId);
         List<Topic> res = topicList.stream()
                 .filter(item -> {
                     boolean b1 = info.equals(item.getTypeName());
@@ -96,7 +96,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public TempResult delTopic(Integer tId) {
         TempResult tempResult = new TempResult();
-        Integer integer = topicDao.delTopic(tId);
+        Integer integer = topicMapper.delTopic(tId);
         tempResult.setFlag(integer != 0);
         tempResult.setMsg(tempResult.isFlag() ? "删除成功！" : Code.ERROR_MSG);
         return tempResult;
@@ -111,7 +111,7 @@ public class TopicServiceImpl implements TopicService {
     public TempResult updateTopic(Topic topic) {
         TempResult tempResult = new TempResult();
         topic.setAnswer(AnswerUtils.formatAnswer(topic.getTypeId(), topic.getAnswer()));
-        Integer integer = topicDao.updateTopic(topic);
+        Integer integer = topicMapper.updateTopic(topic);
         tempResult.setFlag(integer != 0);
         tempResult.setMsg(tempResult.isFlag() ? "修改成功！" : Code.ERROR_MSG);
         return tempResult;
@@ -128,7 +128,7 @@ public class TopicServiceImpl implements TopicService {
     public TempResult topicToPapers(Integer uId, Integer[] tIds, String papersName, JSONObject topicScore) {
         JSONObject result = new JSONObject();
         // 查到所有的试卷类型
-        topicTypeDao.selectAll().forEach(item ->
+        topicTypeMapper.selectAll().forEach(item ->
                 result.put(String.valueOf(item.getTypeId()), new ArrayList<>()));
         // 存放试卷的格式
         // {
@@ -139,17 +139,17 @@ public class TopicServiceImpl implements TopicService {
         //}
 
         TempResult tempResult = new TempResult();
-        for (Topic topic : topicDao.topicToPapers(tIds)) {
+        for (Topic topic : topicMapper.topicToPapers(tIds)) {
             // topic.getTypeId()获取题目的类型
             result.getJSONArray(String.valueOf(topic.getTypeId()))   // "1": [],
                     .add(new PapersContent(
-                            topic.gettId(),
+                            topic.getTId(),
                             topic.getQuestion(),
                             topic.getAnswer(),
                             topicScore.getInteger(String.valueOf(topic.getTypeId()))));
         }
 
-        Integer integer = papersDao.addPaper(new Papers(uId, papersName, result.toString(), LocalDateTime.now()));
+        Integer integer = papersMapper.addPaper(new Papers(uId, papersName, result.toString(), LocalDateTime.now()));
         tempResult.setFlag(integer != 0);
         tempResult.setMsg(tempResult.isFlag() ? "试卷生成成功！" : Code.ERROR_MSG);
         return tempResult;
@@ -198,7 +198,7 @@ public class TopicServiceImpl implements TopicService {
         JSONObject typeCheck = check.getJSONObject("typeNumCheck");
         // 难度系数分部约束
         JSONObject difficultyCheck = check.getJSONObject("difficultyCheck");
-        ArrayList<JSONObject> typeCountList = topicDao.typeCount(tagId);
+        ArrayList<JSONObject> typeCountList = topicMapper.typeCount(tagId);
         JSONObject typeCount = new JSONObject();
         typeCountList.forEach((item) -> {
             typeCount.put(item.getString("typeId"), item.getInteger("count"));
@@ -217,7 +217,7 @@ public class TopicServiceImpl implements TopicService {
             // 用户传递过来想要数量
             int n2 = Integer.parseInt(value.toString());
             if (n1 < n2) {
-                typeStringList.add(topicTypeDao.selectById(Integer.valueOf(key)));
+                typeStringList.add(topicTypeMapper.selectById(Integer.valueOf(key)));
             }
         }
 
@@ -239,7 +239,7 @@ public class TopicServiceImpl implements TopicService {
         for (String key : typeCheck.keySet()) {
             // 实际要的题量，例如：判断题->2
             int intValue = Integer.parseInt(typeCheck.getInteger(key).toString());
-            typeTopicList.put(key, topicDao.selectByTypeId(uId, Integer.parseInt(key), tagId));
+            typeTopicList.put(key, topicMapper.selectByTypeId(uId, Integer.parseInt(key), tagId));
             double easy = difficultyCheck.getDouble("1");
             double middle = difficultyCheck.getDouble("2");
             double difficulty = difficultyCheck.getDouble("3");
@@ -320,8 +320,8 @@ public class TopicServiceImpl implements TopicService {
                 }
 
                 if (subNumTemp < 0) {
-                    String topicTypeName = topicTypeDao.selectById(Integer.valueOf(typeId));
-                    String difficultyName = difficultyDao.selectById(i + 1);
+                    String topicTypeName = topicTypeMapper.selectById(Integer.valueOf(typeId));
+                    String difficultyName = difficultyMapper.selectById(i + 1);
                     tempResult.setFlag(false);
                     tempResult.setMsg(String.format("%s中的%s题数量不足，请补充题库或修改随机数量！", topicTypeName, difficultyName));
                     return tempResult;
@@ -329,7 +329,7 @@ public class TopicServiceImpl implements TopicService {
 
                 tempPapers.forEach(topic -> {
                             PapersContent papersContent = new PapersContent();
-                            papersContent.settId(topic.gettId());
+                            papersContent.setTId(topic.getTId());
                             papersContent.setQuestion(topic.getQuestion());
                             papersContent.setAnswer(topic.getAnswer());
                             papersContent.setScore(topicScore.getInteger(String.valueOf(topic.getTypeId())));
@@ -339,7 +339,7 @@ public class TopicServiceImpl implements TopicService {
             }
         }
 
-        Integer integer = papersDao.addPaper(new Papers(uId, papersName, papersResult.toString(), LocalDateTime.now()));
+        Integer integer = papersMapper.addPaper(new Papers(uId, papersName, papersResult.toString(), LocalDateTime.now()));
         tempResult.setFlag(integer != 0);
         tempResult.setMsg(tempResult.isFlag() ? "试卷生成成功！" : Code.ERROR_MSG);
         return tempResult;

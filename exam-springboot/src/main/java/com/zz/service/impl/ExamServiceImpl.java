@@ -7,13 +7,11 @@ import com.zz.service.ExamService;
 import com.zz.bean.Course;
 import com.zz.bean.Exam;
 import com.zz.bean.StudentExam;
-import com.zz.dao.ExamDao;
+import com.zz.mapper.ExamMapper;
 import com.zz.utils.Code;
 import com.zz.utils.ExamUtils;
 import com.zz.utils.result.ApiResult;
 import com.zz.utils.result.TempResult;
-import com.zz.utils.subjecttiveJudge.ScorePointSim;
-import com.zz.utils.subjecttiveJudge.SentenceSeparation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,14 +25,14 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ExamServiceImpl implements ExamService {
 
     @Autowired
-    private ExamDao examDao;
+    private ExamMapper examMapper;
 
     //创建考试
     @Override
     public TempResult createExam(Exam exam) {
         System.out.println("create Exam print" + exam.toString());
         TempResult tempResult = new TempResult();
-        Integer exam1 = examDao.createExam(exam);
+        Integer exam1 = examMapper.createExam(exam);
         if (exam1 != 0) {
             tempResult.setFlag(true);
             tempResult.setMsg("创建成功！");
@@ -49,7 +47,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public TempResult deleteExam(Integer examId) {
         TempResult tempResult = new TempResult();
-        Integer exam1 = examDao.deleteExam(examId);
+        Integer exam1 = examMapper.deleteExam(examId);
         if (exam1 != 0) {
             tempResult.setFlag(true);
             tempResult.setMsg("删除成功！");
@@ -64,7 +62,7 @@ public class ExamServiceImpl implements ExamService {
     //考试信息更改 时间、试卷等。
     @Override
     public ApiResult<Exam> updateExamInfo(Exam exam) {
-        Integer flag = examDao.updateExamInfo(exam);//返回更新后的考试实体
+        Integer flag = examMapper.updateExamInfo(exam);//返回更新后的考试实体
         ApiResult<Exam> apiResult = new ApiResult<>();
 
         if (flag != null) {
@@ -82,7 +80,7 @@ public class ExamServiceImpl implements ExamService {
         ApiResult<List<Exam>> apiResult = new ApiResult<>();
 //        Page<?> page = PageHelper.startPage(Integer.parseInt(pageNumNow), 5);  //设置第几条记录开始，多少条记录为一页
         //通过userService获取user的信息，其sql语句为"select * from user" 但因pageHelper已经注册为插件，所以pageHelper会在原sql语句上增加limit，从而实现分页
-        List<Exam> exams = examDao.selectAll(uId);//因而获得的是分好页的结果集
+        List<Exam> exams = examMapper.selectAll(uId);//因而获得的是分好页的结果集
 //        PageInfo<?> pageHelper = page.toPageInfo(); //获取页面信息的对象，里面封装了许多页面的信息 如：总条数，当前页码，需显示的导航页等等
         apiResult.setData(exams);
         if (apiResult.getData() != null) {
@@ -96,11 +94,11 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public ApiResult<Exam> selectOne(Integer examId) {
+    public ApiResult<Exam> selectOneByEId(Integer examId) {
         /**
          * 查询结果
          */
-        Exam exam = examDao.selectOne(examId);
+        Exam exam = examMapper.selectOneByEId(examId);
         ApiResult<Exam> apiResult = new ApiResult<>();
         if (exam != null) {
             apiResult.setData(exam);
@@ -121,12 +119,12 @@ public class ExamServiceImpl implements ExamService {
      * @return
      */
     public ApiResult<List<JSONObject>> getExamListByStu(Integer uId) {
-        List<Course> coursesByUid = examDao.getCoursesByUid(uId);
+        List<Course> coursesByUid = examMapper.getCoursesByUid(uId);
         ArrayList<Integer> cIds = new ArrayList<>();
         for (Course course : coursesByUid) {
-            cIds.add(course.getcId());
+            cIds.add(course.getCId());
         }
-        ArrayList<JSONObject> res = examDao.getExamsByCourseId(cIds);
+        ArrayList<JSONObject> res = examMapper.getExamsByCourseId(cIds);
         return new ApiResult<>(Code.GET_OK, res, "查询成功");
     }
 
@@ -142,7 +140,7 @@ public class ExamServiceImpl implements ExamService {
         Integer eId = jsonObject.getInteger("eId");
         ApiResult<Boolean> isSub = isSubmit(uId, eId);
         if (!isSub.getData()) return isSub;
-        Exam exam = examDao.selectOne(eId);
+        Exam exam = examMapper.selectOneByEId(eId);
         JSONObject rightContent = JSON.parseObject(exam.getContent());
         JSONObject content = jsonObject.getJSONObject("content");
         ArrayList<JSONObject> res = new ArrayList<>();
@@ -198,23 +196,23 @@ public class ExamServiceImpl implements ExamService {
         result.put("content", res);
         StudentExam studentExam = new StudentExam(uId, eId, result.toString());
         studentExam.setCreateTime(LocalDateTime.now());
-        if (examDao.selectIsExist(studentExam) != 0) {
+        if (examMapper.selectIsExist(studentExam) != 0) {
             return new ApiResult<>(Code.SAVA_ERR, null, "不可反复提交试卷！");
         }
-        Integer integer = examDao.addExamRecord(studentExam);
+        Integer integer = examMapper.addExamRecord(studentExam);
         boolean isSuccess = integer != 0;
         return new ApiResult<>(isSuccess ? Code.SAVA_OK : Code.SAVA_ERR, result,
                 isSuccess ? "数据处理成功！" : "数据处理失败！");
     }
 
     public ApiResult<Object> getExams() {
-        List<Exam> examList = examDao.findAll(); // 获取所有考试记录
+        List<Exam> examList = examMapper.findAll(); // 获取所有考试记录
         int count = 0;
         for (Exam exam : examList) { // 遍历考试记录
             Integer status = ExamUtils.getExamStatus(exam.getStartTime(), exam.getEndTime()); // 计算考试状态
             if (!Objects.equals(exam.getStatus(), status)) {
                 exam.setStatus(status); // 将计算结果保存到考试记录中
-                examDao.updateStatus(exam);
+                examMapper.updateStatus(exam);
                 count++;
             }
         }
@@ -223,7 +221,7 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public ApiResult<Boolean> isSubmit(Integer uId, Integer eId) {
-        Integer count = examDao.isSubmit(uId, eId);
+        Integer count = examMapper.isSubmit(uId, eId);
         boolean isSub = count == 0;
         return new ApiResult<>(Code.GET_OK, isSub,
                 isSub ? "可以提交试卷！" : "已经提交试卷，不可重复提交！");
@@ -231,7 +229,7 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public ApiResult<List<JSONObject>> submitList(Integer uId) {
-        ArrayList<JSONObject> res = examDao.submitList(uId);
+        ArrayList<JSONObject> res = examMapper.submitList(uId);
         return new ApiResult<>(Code.GET_OK, res,
                 res.size() != 0 ? "查询到" + res.size() + "条数据！" : "查询结果为空！");
     }

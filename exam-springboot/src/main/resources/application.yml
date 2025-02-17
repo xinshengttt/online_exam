@@ -42,12 +42,22 @@ my-email:
 jwt:
   secret: P@ssw0rd123 # 加密密钥
 
-mybatis:
+mybatis-plus:
   configuration:
+    map-underscore-to-camel-case: true
     # 开启sql日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    mapper-locations: classpath:com.zz.dao
-    map-underscore-to-camel-case: true
     # 开启事务管理器
     sqlSessionTemplate:
       executorType: BATCH
+  mapper-locations: classpath*:/mapper/*.xml
+
+#mybatis:
+#  configuration:
+#    # 开启sql日志
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    mapper-locations: classpath:com.zz.dao
+#    map-underscore-to-camel-case: true
+#    # 开启事务管理器
+#    sqlSessionTemplate:
+#      executorType: BATCH

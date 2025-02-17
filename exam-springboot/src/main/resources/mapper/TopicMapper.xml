@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zz.mapper.TopicMapper">
+    <insert id="addTopic">
+        insert into topic
+        values(null,#{uId},#{typeId},#{tagId},#{difficultyId},
+               #{question},#{answer},#{status},1,#{createTime})
+    </insert>
+    <update id="updateTopic">
+        update topic
+        set type_id=#{typeId},tag_id=#{tagId},difficulty_id=#{difficultyId},
+            question=#{question},answer=#{answer},status=#{status}
+        where t_id=#{tId}
+    </update>
+    <update id="topicToPapers">
+        select *
+        from topic
+        <where>
+            t_id in
+            <foreach item='tId' collection='tIds' open='(' separator=',' close=')'>
+                #{tId}
+            </foreach>
+        </where>
+    </update>
+    <delete id="delTopic">
+        update topic
+        set is_exist=0
+        where t_id=#{tId} and is_exist=1
+    </delete>
+
+    <select id="selectByUId" resultType="com.zz.bean.Topic">
+        select t.*, d.name as difficultyName, tt.name as typeName, tag.name as tagName
+        from topic t
+        left join difficulty d on t.difficulty_id= d.d_id
+        left join topic_type tt on tt.type_id = t.type_id
+        left join tag on tag.tag_id = t.tag_id
+        where (t.u_id=#{uId} or t.status=1)
+          and t.is_exist=1
+        ORDER BY t.create_time DESC
+    </select>
+    <select id="typeCount" resultType="com.alibaba.fastjson.JSONObject">
+        select type_id, count(1) count
+        from topic
+        where tag_id = #{tagId}
+        group by type_id
+    </select>
+    <select id="selectByTypeId" resultType="com.zz.bean.Topic">
+        select t_id, type_id, tag_id, difficulty_id, question, answer
+        from topic
+        where (u_id=#{uId} or status=1) and is_exist=1
+            and type_id=#{typeId} and tag_id=#{tagId}
+    </select>
+</mapper>

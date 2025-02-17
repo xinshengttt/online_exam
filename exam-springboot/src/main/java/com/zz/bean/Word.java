@@ -2,8 +2,11 @@ package com.zz.bean;
 
 
 
+import lombok.Data;
+
 import java.util.Objects;
 
+@Data
 public class Word implements Comparable {
 
     // 词名
@@ -17,37 +20,6 @@ public class Word implements Comparable {
         this.name = name;
         this.pos = pos;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(this.name);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Word other = (Word) obj;
-        return Objects.equals(this.name, other.name);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-        if (name != null) {
-            str.append(name);
-        }
-        if (pos != null) {
-            str.append("/").append(pos);
-        }
-
-        return str.toString();
-    }
-
     @Override
     public int compareTo(Object o) {
         if (this == o) {
@@ -67,29 +39,5 @@ public class Word implements Comparable {
             return 1;
         }
         return this.name.compareTo(t);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPos() {
-        return pos;
-    }
-
-    public void setPos(String pos) {
-        this.pos = pos;
-    }
-
-    public Float getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Float weight) {
-        this.weight = weight;
     }
 }

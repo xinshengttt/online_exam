@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zz.mapper.TagMapper">
+    <insert id="addTag">
+        insert into tag values(null,#{uId},#{name})
+    </insert>
+    <update id="updateTag">
+        UPDATE tag SET u_id = #{uId}, name = #{name} where tag_id =#{tagId}
+    </update>
+    <delete id="deleteTag">
+        delete from tag where tag_id = #{tagId}
+    </delete>
+    <select id="selectAll" resultType="com.zz.bean.Tag">
+        select tag_id, u_id, name from tag where u_id in (0,#{uId})
+    </select>
+    <select id="selectById" resultType="java.lang.String">
+        select name from tag where tag_id=#{tagId}
+    </select>
+</mapper>

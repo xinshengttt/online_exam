@@ -22,7 +22,7 @@ public interface ExamService {
     // 查询
     ApiResult<List<Exam>> selectAll(Integer uId);
 
-    ApiResult<Exam> selectOne(Integer examId);
+    ApiResult<Exam> selectOneByEId(Integer examId);
 
     ApiResult<?> judge(JSONObject jsonObject);
 

@@ -1,10 +1,21 @@
 package com.zz.bean;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
+@Data
+@TableName("student_exam")
 public class StudentExam {
+    @TableId(value = "se_id")
+    @JsonProperty("seId")
     private Integer seId;
+    @JsonProperty("uId")
     private Integer uId;
+    @JsonProperty("eId")
     private Integer eId;
     private String rightStudentAnswer;
 
@@ -19,54 +30,4 @@ public class StudentExam {
         this.rightStudentAnswer = rightStudentAnswer;
     }
 
-    @Override
-    public String toString() {
-        return "StudentExam{" +
-                "seId=" + seId +
-                ", uId=" + uId +
-                ", eId=" + eId +
-                ", rightStudentAnswer='" + rightStudentAnswer + '\'' +
-                ", createTime=" + createTime +
-                '}';
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public Integer getSeId() {
-        return seId;
-    }
-
-    public void setSeId(Integer seId) {
-        this.seId = seId;
-    }
-
-    public Integer getuId() {
-        return uId;
-    }
-
-    public void setuId(Integer uId) {
-        this.uId = uId;
-    }
-
-    public Integer geteId() {
-        return eId;
-    }
-
-    public void seteId(Integer eId) {
-        this.eId = eId;
-    }
-
-    public String getRightStudentAnswer() {
-        return rightStudentAnswer;
-    }
-
-    public void setRightStudentAnswer(String rightStudentAnswer) {
-        this.rightStudentAnswer = rightStudentAnswer;
-    }
 }

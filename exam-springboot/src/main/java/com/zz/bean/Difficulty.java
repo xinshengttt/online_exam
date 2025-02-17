@@ -1,30 +1,16 @@
 package com.zz.bean;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
+@Data
+@TableName("difficulty")
 public class Difficulty {
+    @TableId(value = "d_id")
+    @JsonProperty("dId")
     private Integer dId;
     private String name;
 
-    @Override
-    public String toString() {
-        return "Difficulty{" +
-                "dId=" + dId +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-    public Integer getdId() {
-        return dId;
-    }
-
-    public void setdId(Integer dId) {
-        this.dId = dId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

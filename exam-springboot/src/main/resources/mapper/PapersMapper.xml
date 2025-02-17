@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zz.mapper.PapersMapper">
+    <insert id="addPaper">
+        insert into papers values(null,#{uId}, #{name}, #{content}, #{createTime},1)
+    </insert>
+    <update id="updateName">
+        update papers set name=#{name} where p_id=#{pId} and is_exist=1
+    </update>
+    <delete id="deleteByPId">
+        update papers set is_exist=0 where p_id=#{pId}
+    </delete>
+    <select id="selectAllByUId" resultType="com.zz.bean.Papers">
+        select * from papers where u_id=#{uId} and is_exist=1 ORDER BY create_time DESC
+    </select>
+    <select id="getPaper" resultType="com.zz.bean.Papers">
+        select * from papers where p_id = #{pId} and is_exist=1
+    </select>
+    <select id="getPaperContent" resultType="java.lang.String">
+        select content from papers WHERE p_id = #{pId} and is_exist=1
+    </select>
+</mapper>

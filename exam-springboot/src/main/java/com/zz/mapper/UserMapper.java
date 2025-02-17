@@ -1,5 +1,7 @@
-package com.zz.dao;
+package com.zz.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zz.bean.Course;
 import com.zz.bean.User;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -10,18 +12,13 @@ import java.util.ArrayList;
 
 @Mapper
 //@Repository
-public interface UserDao {
+public interface UserMapper extends BaseMapper<User> {
 
-    @Insert("insert into user values(null, #{rId}, " +
-            "#{username}, #{password}, #{email}, #{registerTime})")
     Integer addUser(User user);
 
-    @Select("select * from user where email=#{email} and r_id=#{rId}")
     ArrayList<User> selectByEmail(User user);
 
-    @Update("update user set password=#{password} where email=#{email} and r_id=#{rId}")
     Integer updateUser(User user);
 
-    @Select("select username from user where u_id = #{uId}")
     String getNameById(Integer uId);
 }

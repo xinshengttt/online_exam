@@ -3,7 +3,7 @@ package com.zz.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.zz.service.UserService;
 import com.zz.bean.User;
-import com.zz.dao.UserDao;
+import com.zz.mapper.UserMapper;
 import com.zz.utils.Code;
 import com.zz.utils.JwtTokenUtil;
 import com.zz.utils.result.ApiResult;
@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     private EmailUtils emailUtils;
 
     @Autowired
-    private UserDao userDao;
+    private UserMapper userMapper;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -39,14 +39,14 @@ public class UserServiceImpl implements UserService {
         if (!result.isFlag()) {
             return result;
         }
-        ArrayList<User> isExist = userDao.selectByEmail(user);
+        ArrayList<User> isExist = userMapper.selectByEmail(user);
         if (!isExist.isEmpty()) {
             result.setFlag(false);
             result.setMsg("邮箱已被注册...");
             return result;
         }
         user.setPassword(encoder.encode(user.getPassword()));
-        Integer isSucceed = userDao.addUser(user);
+        Integer isSucceed = userMapper.addUser(user);
         if (isSucceed != null && isSucceed != 0) {
             result.setMsg("注册成功！");
             result.setFlag(true);
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResult<JSONObject> login(User user) {
-        ArrayList<User> userLis = userDao.selectByEmail(user);
+        ArrayList<User> userLis = userMapper.selectByEmail(user);
         ApiResult<JSONObject> apiResult = new ApiResult<>();
         if (userLis.isEmpty()) {
             apiResult.setCode(Code.GET_ERR);
@@ -69,13 +69,13 @@ public class UserServiceImpl implements UserService {
             // 返回token，并将用户信息存储到redis
             if (isSucceed) {
                 JSONObject userJson = new JSONObject();
-                userJson.put("uId", rightUser.getuId());
+                userJson.put("uId", rightUser.getUId());
                 userJson.put("username", rightUser.getUsername());
                 String token = jwtTokenUtil.generateToken(userJson.toJSONString());
                 String parserToken = jwtTokenUtil.parserToken(token);
                 System.out.println(parserToken);
                 data.put("token", token);
-                redisTemplate.opsForValue().set("userId:" + rightUser.getuId(), rightUser);
+                redisTemplate.opsForValue().set("userId:" + rightUser.getUId(), rightUser);
             }
             apiResult.setData(data);
             apiResult.setMsg(isSucceed ? "登录成功！" : "密码错误！");
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
         TempResult tempResult = emailUtils.emailCheck(user.getEmailCode(), user.getEmail());
         if (tempResult.isFlag()) {
             user.setPassword(encoder.encode(user.getPassword()));
-            tempResult.setMsg(userDao.updateUser(user) != 0 ? "修改成功！" : Code.ERROR_MSG);
+            tempResult.setMsg(userMapper.updateUser(user) != 0 ? "修改成功！" : Code.ERROR_MSG);
         }
         return tempResult;
     }

@@ -6,8 +6,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.zz.service.TopicService;
 import com.zz.bean.Topic;
 import com.zz.bean.PapersContent;
-import com.zz.dao.TopicDao;
-import com.zz.dao.TopicTypeDao;
+import com.zz.mapper.TopicMapper;
+import com.zz.mapper.TopicTypeMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,9 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TopicTest {
 
     @Autowired
-    private TopicDao topicDao;
+    private TopicMapper topicMapper;
     @Autowired
-    private TopicTypeDao topicTypeDao;
+    private TopicTypeMapper topicTypeMapper;
 
     @Autowired
     private TopicService topicService;
@@ -29,7 +29,7 @@ public class TopicTest {
 
     @Test
     void selectTest() {
-        System.out.println(topicDao.selectByUId(9));
+        System.out.println(topicMapper.selectByUId(9));
     }
 
     @Test
@@ -43,15 +43,15 @@ public class TopicTest {
     @Test
     void topicToPapersTest() {
         JSONObject result = new JSONObject();
-        for (Topic topic : topicDao.topicToPapers(new Integer[]{1, 2, 3})) {
-            result.put(String.valueOf(topic.gettId()), new PapersContent(topic.getQuestion(), topic.getAnswer(), 1));
+        for (Topic topic : topicMapper.topicToPapers(new Integer[]{1, 2, 3})) {
+            result.put(String.valueOf(topic.getTId()), new PapersContent(topic.getQuestion(), topic.getAnswer(), 1));
         }
         System.out.println(result);
     }
 
     @Test
     void typeCountTest() {
-        System.out.println(topicDao.typeCount(2));
+        System.out.println(topicMapper.typeCount(2));
     }
 
     @Test

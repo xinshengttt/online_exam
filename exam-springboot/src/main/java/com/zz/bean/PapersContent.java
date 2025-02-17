@@ -1,9 +1,15 @@
 package com.zz.bean;
 
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
 /**
  * 用来存放单个题目内容，形成JSONObject存在到试卷中
  */
+@Data
 public class PapersContent {
+    @JsonProperty("tId")
     private Integer tId;
     private String question;
     private String answer;
@@ -29,47 +35,5 @@ public class PapersContent {
         this.question = question;
         this.answer = answer;
         this.score = score;
-    }
-
-    @Override
-    public String toString() {
-        return "PapersContent{" +
-                "tId=" + tId +
-                ", question='" + question + '\'' +
-                ", answer='" + answer + '\'' +
-                ", score=" + score +
-                '}';
-    }
-
-    public Integer getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
-    }
-
-    public Integer gettId() {
-        return tId;
-    }
-
-    public void settId(Integer tId) {
-        this.tId = tId;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
     }
 }

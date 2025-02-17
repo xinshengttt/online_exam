@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zz.mapper.ExamMapper">
+    <insert id="createExam">
+        insert into exam values(null, #{uId}, #{cId},#{pId},#{name},#{startTime},#{endTime},1,1)
+    </insert>
+    <insert id="addExamRecord">
+        insert into student_exam values(null, #{uId}, #{eId}, #{rightStudentAnswer}, #{createTime})
+    </insert>
+    <update id="updateExamInfo">
+        UPDATE exam set u_id=#{uId},c_id=#{cId},p_id=#{pId},name=#{name},start_time = #{startTime},
+                        end_time=#{endTime},status=#{status},is_exist = #{isExist}
+                    where e_id=#{eId}
+    </update>
+    <update id="deleteExam">
+        UPDATE exam set is_exist = 0 where e_id =#{examId}
+    </update>
+    <update id="updateStatus">
+        update exam set status=#{status} where e_id=#{eId}
+    </update>
+    <select id="selectAll" resultType="com.zz.bean.Exam">
+        select e.*, u.username, c.name, p.content
+        from exam e
+        left join `user` u on u.u_id = e.u_id
+        left join course c on c.c_id = e.c_id
+        left join papers p on p.p_id = e.p_id
+        where e.u_id=#{uId} and e.is_exist=1
+        ORDER BY start_time DESC
+    </select>
+    <select id="selectOneByEId" resultType="com.zz.bean.Exam">
+        select e.*, u.username, c.name, p.content
+        from exam e
+        left join `user` u on u.u_id = e.u_id
+        left join course c on c.c_id = e.c_id
+        left join papers p on p.p_id = e.p_id
+        where e.e_id=#{eId} and e.is_exist=1
+    </select>
+    <select id="getCoursesByUid" resultType="com.zz.bean.Course">
+        SELECT *,c.name as courName
+        FROM course c
+        JOIN student_course sc ON c.c_id = sc.c_id
+        JOIN user s ON sc.u_id = s.u_id
+        WHERE s.u_id = #{uId} and c.is_exist=1
+    </select>
+    <select id="getExamsByCourseId" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT e.*, c.name as courseName, u.username as teacherName FROM exam e
+        JOIN course c ON e.c_id = c.c_id
+        JOIN user u ON c.u_id = u.u_id
+        <where>
+            <choose>
+                <when test='cIds == null or cIds.size() == 0'>
+                    and c.c_id in (-1)
+                </when>
+                <otherwise>
+                    and c.c_id in
+                    <foreach item='cId' collection='cIds' open='(' separator=',' close=')'>
+                        #{cId}
+                    </foreach>
+                </otherwise>
+            </choose>
+            and e.is_exist = 1
+        </where>
+        order by start_time desc
+    </select>
+    <select id="selectIsExist" resultType="java.lang.Integer">
+        select count(1) from student_exam where u_id=#{uId} and e_id=#{eId}
+    </select>
+    <select id="findAll" resultType="com.zz.bean.Exam">
+        select * from exam
+    </select>
+    <select id="isSubmit" resultType="java.lang.Integer">
+        select count(1) from student_exam where u_id=#{uId} and e_id=#{eId}
+    </select>
+    <select id="submitList" resultType="com.alibaba.fastjson.JSONObject">
+        select * from student_exam where u_id=#{uId}
+    </select>
+</mapper>

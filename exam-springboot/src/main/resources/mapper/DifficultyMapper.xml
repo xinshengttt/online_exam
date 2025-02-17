@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zz.mapper.DifficultyMapper">
+
+    <select id="selectAll" resultType="com.zz.bean.Difficulty">
+        select d_id, name from difficulty
+    </select>
+    <select id="selectById" resultType="java.lang.String">
+        select name from difficulty where d_id=#{dId}
+    </select>
+</mapper>

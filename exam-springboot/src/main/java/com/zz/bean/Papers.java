@@ -1,9 +1,19 @@
 package com.zz.bean;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
+@Data
+@TableName("papers")
 public class Papers {
+    @TableId(value = "p_id")
+    @JsonProperty("pId")
     private Integer pId;
+    @JsonProperty("uId")
     private Integer uId;
     private String name;
     private String content;
@@ -24,65 +34,5 @@ public class Papers {
         this.name = name;
         this.content = content;
         this.createTime = createTime;
-    }
-
-    @Override
-    public String toString() {
-        return "Papers{" +
-                "pId=" + pId +
-                ", uId=" + uId +
-                ", name='" + name + '\'' +
-                ", content='" + content + '\'' +
-                ", createTime=" + createTime +
-                ", isExist=" + isExist +
-                '}';
-    }
-
-    public Integer getIsExist() {
-        return isExist;
-    }
-
-    public void setIsExist(Integer isExist) {
-        this.isExist = isExist;
-    }
-
-    public Integer getuId() {
-        return uId;
-    }
-
-    public void setuId(Integer uId) {
-        this.uId = uId;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public Integer getpId() {
-        return pId;
-    }
-
-    public void setpId(Integer pId) {
-        this.pId = pId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 }

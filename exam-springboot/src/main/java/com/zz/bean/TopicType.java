@@ -1,30 +1,13 @@
 package com.zz.bean;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
+@Data
+@TableName("topic_type")
 public class TopicType {
+    @TableId(value = "type_id")
     private Integer typeId;
     private String name;
-
-    @Override
-    public String toString() {
-        return "TopicType{" +
-                "typeId=" + typeId +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-    public Integer getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

@@ -32,9 +32,9 @@ public class ExamController {
     public ApiResult<Object> createExam(@RequestBody JSONObject param) {
 //        读取map数据注入exam
         Exam exam = new Exam();
-        exam.setcId(param.getInteger("cId"));
-        exam.setpId(param.getInteger("pId"));
-        exam.setuId(param.getInteger("uId"));
+        exam.setCId(param.getInteger("cId"));
+        exam.setPId(param.getInteger("pId"));
+        exam.setUId(param.getInteger("uId"));
         exam.setName(param.getString("name"));
 
         //字符串格式化为时间 LocalDateTime类型
@@ -69,10 +69,10 @@ public class ExamController {
     public ApiResult<Exam> updateExamInfo(@RequestBody JSONObject param) {
         // 封装Exam
         Exam exam = new Exam();
-        exam.seteId(param.getInteger("eId"));
-        exam.setuId(param.getInteger("uId"));
-        exam.setpId(param.getInteger("pId"));
-        exam.setcId(param.getInteger("cId"));
+        exam.setEId(param.getInteger("eId"));
+        exam.setUId(param.getInteger("uId"));
+        exam.setPId(param.getInteger("pId"));
+        exam.setCId(param.getInteger("cId"));
         exam.setName(param.getString("name"));
         exam.setStatus(param.getInteger("status"));
         exam.setIsExist(param.getInteger("isExist"));
@@ -102,7 +102,7 @@ public class ExamController {
      */
     @GetMapping("/selectOne/{examId}")
     public ApiResult<Exam> selectOne(@PathVariable("examId") Integer examId) {
-        return examService.selectOne(examId);
+        return examService.selectOneByEId(examId);
     }
 
     /**
@@ -112,7 +112,7 @@ public class ExamController {
      */
     @GetMapping("/selectOne/student/{examId}")
     public ApiResult<Exam> selectOneStu(@PathVariable("examId") String examId) {
-        ApiResult<Exam> apiResult = examService.selectOne(Integer.parseInt(examId));
+        ApiResult<Exam> apiResult = examService.selectOneByEId(Integer.parseInt(examId));
         JSONObject content = JSONObject.parseObject(apiResult.getData().getContent());
         for (String key : content.keySet()) {
             JSONArray jsonArray = content.getJSONArray(key);

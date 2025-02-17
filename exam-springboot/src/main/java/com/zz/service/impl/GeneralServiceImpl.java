@@ -5,10 +5,10 @@ import com.zz.bean.Difficulty;
 import com.zz.bean.Role;
 import com.zz.bean.Tag;
 import com.zz.bean.TopicType;
-import com.zz.dao.DifficultyDao;
-import com.zz.dao.RoleDao;
-import com.zz.dao.TagDao;
-import com.zz.dao.TopicTypeDao;
+import com.zz.mapper.DifficultyMapper;
+import com.zz.mapper.RoleMapper;
+import com.zz.mapper.TagMapper;
+import com.zz.mapper.TopicTypeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,31 +18,31 @@ import java.util.ArrayList;
 public class GeneralServiceImpl implements GeneralService {
 
     @Autowired
-    private TagDao tagDao;
+    private TagMapper tagMapper;
     @Autowired
-    private TopicTypeDao topicTypeDao;
+    private TopicTypeMapper topicTypeMapper;
     @Autowired
-    private DifficultyDao difficultyDao;
+    private DifficultyMapper difficultyMapper;
     @Autowired
-    private RoleDao roleDao;
+    private RoleMapper roleMapper;
 
     @Override
     public ArrayList<Tag> getTagList(Integer uId) {
-        return tagDao.selectAll(uId);
+        return tagMapper.selectAll(uId);
     }
 
     @Override
     public ArrayList<TopicType> getTypeList() {
-        return topicTypeDao.selectAll();
+        return topicTypeMapper.selectAll();
     }
 
     @Override
     public ArrayList<Difficulty> getDifficultyList() {
-        return difficultyDao.selectAll();
+        return difficultyMapper.selectAll();
     }
 
     @Override
     public ArrayList<Role> getRoleList() {
-        return roleDao.selectAll();
+        return roleMapper.selectAll();
     }
 }

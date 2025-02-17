@@ -1,5 +1,7 @@
-package com.zz.dao;
+package com.zz.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.zz.bean.Course;
 import com.zz.bean.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -7,8 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.ArrayList;
 
 @Mapper
-public interface RoleDao {
+public interface RoleMapper extends BaseMapper<Role> {
 
-    @Select("select r_id, name from role")
     ArrayList<Role> selectAll();
 }

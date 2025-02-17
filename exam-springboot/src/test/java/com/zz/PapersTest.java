@@ -1,7 +1,6 @@
 package com.zz;
 
-import com.zz.dao.ExamDao;
-import com.zz.dao.PapersDao;
+import com.zz.mapper.PapersMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class PapersTest {
     @Autowired
-    private PapersDao papersDao;
+    private PapersMapper papersMapper;
     @Test
    public void getPaperContent(){
     }

@@ -1,6 +1,6 @@
 package com.zz;
 
-import com.zz.dao.CourseDao;
+import com.zz.mapper.CourseMapper;
 import com.zz.utils.JwtTokenUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class MyTest {
 
     @Autowired
-    private CourseDao courseDao;
+    private CourseMapper courseMapper;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
