@@ -127,7 +127,7 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public TempResult topicToPapers(Integer uId, Integer[] tIds, String papersName, JSONObject topicScore) {
         JSONObject result = new JSONObject();
-        // 查到所有的试卷类型
+        // 查到所有的题目类型
         topicTypeMapper.selectAll().forEach(item ->
                 result.put(String.valueOf(item.getTypeId()), new ArrayList<>()));
         // 存放试卷的格式

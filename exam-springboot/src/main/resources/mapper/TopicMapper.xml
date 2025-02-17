@@ -12,7 +12,7 @@
             question=#{question},answer=#{answer},status=#{status}
         where t_id=#{tId}
     </update>
-    <update id="topicToPapers">
+    <select id="topicToPapers">
         select *
         from topic
         <where>
@@ -21,7 +21,7 @@
                 #{tId}
             </foreach>
         </where>
-    </update>
+    </select>
     <delete id="delTopic">
         update topic
         set is_exist=0
