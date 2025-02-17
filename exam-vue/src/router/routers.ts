@@ -2,287 +2,308 @@
 // @ts-ignore
 export const constantRouter = [
   {
-    path: '/',
+    path: "/",
     // @ts-ignore
-    redirect: '/login',
-    name: 'gen',
+    redirect: "/login",
+    name: "gen",
     meta: {
-      title: 'gen',
-      hidden: true
-    }
+      title: "gen",
+      hidden: true,
+    },
   },
   {
-    path: '/login',
+    path: "/login",
     // @ts-ignore 路由懒加载
-    component: () => import('@/views/user/Login.vue'),
-    name: 'login',
+    component: () => import("@/views/user/Login.vue"),
+    name: "login",
     meta: {
-      title: '登录',
-      hidden: true
-    }
+      title: "登录",
+      hidden: true,
+    },
   },
   {
-    path: '/register',
+    path: "/register",
     // @ts-ignore 路由懒加载
-    component: () => import('@/views/user/Register.vue'),
-    name: 'register',
+    component: () => import("@/views/user/Register.vue"),
+    name: "register",
     meta: {
-      title: '注册',
-      hidden: true
-    }
+      title: "注册",
+      hidden: true,
+    },
   },
   {
-    path: '/admin',
-    name: 'admin',
+    path: "/admin",
+    name: "admin",
     // @ts-ignore
-    component: () => import('@/views/admin/index.vue'),
-    redirect: {name: 'student'},
+    component: () => import("@/views/admin/index.vue"),
+    redirect: { name: "student" },
     meta: {
-      title: '管理员页面',
-      hidden: true
+      title: "管理员页面",
+      hidden: true,
     },
     children: [
       {
-        path: 'home',
+        path: "home",
         // @ts-ignore
-        component: () => import('@/views/admin/home/Index.vue'),
+        component: () => import("@/views/admin/home/Index.vue"),
         meta: {
-          title: '主页',
+          title: "主页",
           hidden: true,
-          icon: 'HomeFilled'
+          icon: "HomeFilled",
         },
-        name: 'home'
+        name: "home",
       },
       {
-        path: 'user',
-        name: 'user',
+        path: "user",
+        name: "user",
         meta: {
-          title: '用户管理',
+          title: "用户管理",
           hidden: false,
-          icon: 'UserFilled',
+          icon: "UserFilled",
         },
         children: [
           {
-            path: 'student',
+            path: "student",
             // @ts-ignore
-            component: () => import('@/views/admin/user/Student.vue'),
+            component: () => import("@/views/admin/user/Student.vue"),
             meta: {
-              title: '学生列表',
+              title: "学生列表",
               hidden: false,
             },
-            name: 'student'
+            name: "student",
           },
-        ]
+        ],
       },
       {
-        path: 'courseTeacher',
-        name: 'courseTeacher',
+        path: "classManager",
+        name: "classManager",
         meta: {
-          title: '课程管理',
+          title: "班级管理",
           hidden: false,
-          icon: 'Collection'
+          icon: "UserFilled",
         },
         children: [
           {
-            path: 'courseList',
-            name: 'courseList',
+            path: "class",
             // @ts-ignore
-            component: () => import('@/views/admin/course/List.vue'),
+            component: () => import("@/views/admin/class/List.vue"),
             meta: {
-              title: '课程列表',
+              title: "班级列表",
               hidden: false,
             },
+            name: "class",
           },
-        ]
+        ],
       },
       {
-        path: 'topic',
-        name: 'topic',
+        path: "courseTeacher",
+        name: "courseTeacher",
         meta: {
-          title: '题库管理',
+          title: "课程管理",
           hidden: false,
-          icon: 'OfficeBuilding'
+          icon: "Collection",
         },
         children: [
           {
-            path: 'topicList',
-            name: 'topicList',
+            path: "courseList",
+            name: "courseList",
             // @ts-ignore
-            component: () => import('@/views/admin/topic/List.vue'),
+            component: () => import("@/views/admin/course/List.vue"),
             meta: {
-              title: '题目列表',
+              title: "课程列表",
               hidden: false,
-            }
+            },
           },
-          {
-            path: 'topicCreate',
-            name: 'topicCreate',
-            // @ts-ignore
-            component: () => import('@/views/admin/topic/Create.vue'),
-            meta: {
-              title: '题目创建',
-              hidden: false,
-            }
-          },
-        ]
+        ],
       },
       {
-        path: 'papers',
-        name: 'papers',
+        path: "topic",
+        name: "topic",
         meta: {
-          title: '试卷管理',
+          title: "题库管理",
           hidden: false,
-          icon: 'Reading'
+          icon: "OfficeBuilding",
         },
         children: [
           {
-            path: 'papersList',
-            name: 'papersList',
+            path: "topicList",
+            name: "topicList",
             // @ts-ignore
-            component: () => import('@/views/admin/papers/List.vue'),
+            component: () => import("@/views/admin/topic/List.vue"),
             meta: {
-              title: '试卷列表',
+              title: "题目列表",
               hidden: false,
             },
           },
           {
-            path: 'papersHandCreate',
-            name: 'papersHandCreate',
+            path: "topicCreate",
+            name: "topicCreate",
             // @ts-ignore
-            component: () => import('@/views/admin/papers/HandCreate.vue'),
+            component: () => import("@/views/admin/topic/Create.vue"),
             meta: {
-              title: '手动组卷',
+              title: "题目创建",
               hidden: false,
             },
           },
-          {
-            path: 'papersRandomCreate',
-            name: 'papersRandomCreate',
-            // @ts-ignore
-            component: () => import('@/views/admin/papers/RandomCreate.vue'),
-            meta: {
-              title: '随机组卷',
-              hidden: false,
-            },
-          },
-        ]
+        ],
       },
       {
-        path: 'exam',
-        name: 'exam',
+        path: "papers",
+        name: "papers",
         meta: {
-          title: '考试管理',
+          title: "试卷管理",
           hidden: false,
-          icon: 'DataLine'
+          icon: "Reading",
         },
         children: [
           {
-            path: 'examList',
-            name: 'examList',
+            path: "papersList",
+            name: "papersList",
             // @ts-ignore
-            component: () => import('@/views/admin/exam/List.vue'),
+            component: () => import("@/views/admin/papers/List.vue"),
             meta: {
-              title: '考试列表',
+              title: "试卷列表",
               hidden: false,
             },
           },
           {
-            path: 'examCreate',
-            name: 'examCreate',
+            path: "papersHandCreate",
+            name: "papersHandCreate",
             // @ts-ignore
-            component: () => import('@/views/admin/exam/Create.vue'),
+            component: () => import("@/views/admin/papers/HandCreate.vue"),
             meta: {
-              title: '考试创建',
+              title: "手动组卷",
               hidden: false,
             },
           },
-        ]
+          {
+            path: "papersRandomCreate",
+            name: "papersRandomCreate",
+            // @ts-ignore
+            component: () => import("@/views/admin/papers/RandomCreate.vue"),
+            meta: {
+              title: "随机组卷",
+              hidden: false,
+            },
+          },
+        ],
       },
-    ]
+      {
+        path: "exam",
+        name: "exam",
+        meta: {
+          title: "考试管理",
+          hidden: false,
+          icon: "DataLine",
+        },
+        children: [
+          {
+            path: "examList",
+            name: "examList",
+            // @ts-ignore
+            component: () => import("@/views/admin/exam/List.vue"),
+            meta: {
+              title: "考试列表",
+              hidden: false,
+            },
+          },
+          {
+            path: "examCreate",
+            name: "examCreate",
+            // @ts-ignore
+            component: () => import("@/views/admin/exam/Create.vue"),
+            meta: {
+              title: "考试创建",
+              hidden: false,
+            },
+          },
+        ],
+      },
+    ],
   },
   {
-    path: '/index',
-    name: 'index',
-    redirect: {name: 'userCourse'},
+    path: "/index",
+    name: "index",
+    redirect: { name: "userCourse" },
     // @ts-ignore
-    component: () => import('@/views/admin/index.vue'),
+    component: () => import("@/views/admin/index.vue"),
     meta: {
-      title: '用户页面',
-      hidden: true
+      title: "用户页面",
+      hidden: true,
     },
     children: [
       {
-        path: 'userHome',
-        name: 'userHome',
+        path: "userHome",
+        name: "userHome",
         // @ts-ignore
-        component: () => import('@/views/index/home/index.vue'),
+        component: () => import("@/views/index/home/index.vue"),
         meta: {
-          title: '主页',
+          title: "主页",
           hidden: true,
-          icon: 'HomeFilled'
+          icon: "HomeFilled",
         },
       },
       {
-        path: 'userCourse',
-        name: 'userCourse',
+        path: "userCourse",
+        name: "userCourse",
         // @ts-ignore
-        component: () => import('@/views/index/course/index.vue'),
+        component: () => import("@/views/index/course/index.vue"),
         meta: {
-          title: '课程中心',
+          title: "课程中心",
           hidden: false,
-          icon: 'Collection'
+          icon: "Collection",
         },
       },
       {
-        path: 'userExam',
-        name: 'userExam',
+        path: "userExam",
+        name: "userExam",
         // @ts-ignore
-        component: () => import('@/views/index/exam/index.vue'),
+        component: () => import("@/views/index/exam/index.vue"),
         meta: {
-          title: '考试中心',
+          title: "考试中心",
           hidden: false,
-          icon: 'DataLine'
+          icon: "DataLine",
         },
-      }
-    ]
+      },
+    ],
   },
   {
-    path: '/detailsPage',
-    name: 'detailsPage',
+    path: "/detailsPage",
+    name: "detailsPage",
     // @ts-ignore
-    component: () => import('@/views/admin/exam/DetailsPage.vue'),
+    component: () => import("@/views/admin/exam/DetailsPage.vue"),
     meta: {
-      title: '考试详情页',
-      hidden: true
-    }
+      title: "考试详情页",
+      hidden: true,
+    },
   },
   {
-    path: '/test',
+    path: "/test",
     // @ts-ignore
-    component: () => import('@/components/Test/Test.vue'),
-    name: 'test',
+    component: () => import("@/components/Test/Test.vue"),
+    name: "test",
     meta: {
-      title: '测试页',
-      hidden: true
-    }
+      title: "测试页",
+      hidden: true,
+    },
   },
   {
-    path: '/404',
+    path: "/404",
     // @ts-ignore
-    component: () => import('@/views/404/index.vue'),
-    name: '404',
+    component: () => import("@/views/404/index.vue"),
+    name: "404",
     meta: {
-      title: '404',
-      hidden: true
-    }
+      title: "404",
+      hidden: true,
+    },
   },
   {
-    path: '/:pathMatch(.*)*',
-    redirect: '/404',
-    name: 'Any',
+    path: "/:pathMatch(.*)*",
+    redirect: "/404",
+    name: "Any",
     meta: {
-      title: 'Any',
-      hidden: true
-    }
+      title: "Any",
+      hidden: true,
+    },
   },
-]
+];
